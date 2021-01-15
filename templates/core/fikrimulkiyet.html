@@ -1,0 +1,351 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active"><a href="{% url 'core:index' %}">Ana Sayfa</a></li>
+<li class="breadcrumb-item passive">Ar-Ge Fikri Mülkiyet</li>
+{% endblock breadcrumb%}
+
+
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:patentekle' %}"><i class="fa fa-microscope"></i> Patent Ekle</a>
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:bildiriekle' %}"><i class="fa fa-book-medical"></i> Bildiri Ekle</a>
+    <a class="btn btn-gray-100 btn-outline-blue", href="#"><i class="fa fa-download"></i> Export</a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="animated-fadeIn">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-text-white bg-warning h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p class="text-left h5">Başvurulan Patent Sayısı</p>
+                            </div>
+                            <div class="col-md-5">
+                            <p class="text"><i class=" text-left font-weight-bold text-gray-700 h3">{% for i in patenBasvur %}{% if i.area == 1 %}{{i.area__count}}{% endif %}{% endfor %}</i> Ulusal</p>
+                            </div>
+                            <div class="col-md-7">
+                            <p class="text"><i class="text-left font-weight-bold text-gray-700 h3"> {% for i in patenBasvur %}{% if i.area == 2 %}{{i.area__count}}{% endif %}{% endfor %} </i>Uluslararası</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-primary h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p class="text-left h5">Tescil Edilen Patent Sayısı</p>
+                            </div>
+                            <div class="col-md-5">
+                            <p class="text"><i class=" text-left font-weight-bold text-gray-700 h3">{% if patenTescil %}{% for i in patenTescil %}{% if i.area == 1 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %} </i> Ulusal</p>
+                            </div>
+                            <div class="col-md-7">
+                            <p class="text"><i class="text-left font-weight-bold text-gray-700 h3">{% if patenTescil %}{% for i in patenTescil %}{% if i.area == 2 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %}</i> Uluslararası</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-danger h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p class="text-left h5">Başvurulan Model Sayısı</p>
+                            </div>
+                            <div class="col-md-5">
+                            <p class="text"><i class=" text-left font-weight-bold text-gray-700 h3"> {% if modelBasvur %}{% for i in modelBasvur %}{% if i.area == 1 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %}</i> Ulusal</p>
+                            </div>
+                            <div class="col-md-7">
+                            <p class="text"><i class="text-left font-weight-bold text-gray-700 h3"> {% if modelBasvur %}{% for i in modelBasvur %}{% if i.area == 2 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %}</i> Uluslararası</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-info h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p class="text-left h5">Tescil Edilen Model Sayısı</p>
+                            </div>
+                            <div class="col-md-5">
+                            <p class="text"><i class=" text-left font-weight-bold text-gray-700 h3"> {% if modelTescil %}{% for i in modelTescil %}{% if i.area == 1 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %}</i> Ulusal</p>
+                            </div>
+                            <div class="col-md-7">
+                            <p class="text"><i class="text-left font-weight-bold text-gray-700 h3"> {% if modelTescil %}{% for i in modelTescil %}{% if i.area == 2 %}{{i.area__count}} {% else %}-{% endif %}{% endfor %}{% else %}-{% endif %}</i> Uluslararası</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card-group">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12" style="height:100%">
+                                    <canvas id="myChart1" height="75"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="myChart2" height="100"></canvas> 
+                    </div>
+                </div>        
+            </div>
+            <div class="col-md-3 mt-4 text-gray-700 my-auto">
+                <div class="callout callout-cyan">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fa fa-book-reader"> Ulusal Yayın Sayısı</i>
+                            <p class="text text-lg-center mt-2"><i class="font-weight-bold text-gray-700 h1"> {% for i in bildiriTescil %}{% if i.area == 1 %}{{i.area__count}}{% endif %}{% endfor %} </i></p>
+                            <i class="fa fa-globe align-bottom"> Uluslararası Yayın Sayısı</i>
+                            <p class="text text-lg-center mt-2"><i class="font-weight-bold text-gray-700 h1">{% for i in bildiriTescil %}{% if i.area == 2 %}{{i.area__count}}{% endif %}{% endfor %} </i></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card mt-3">
+                <div class="card-header text-gray-100 bg-dark ">
+                        <p class="text-md-center h3 ">Patent - Faydalı Model Tablosu</p>
+                    </div>
+                    <table class="table table-responsive-sm table-hover table-outline mb-5">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Tanım</th>
+                                <th>Alan</th>
+                                <th>Kod</th>
+                                <th>Başvuru Tarihi</th>
+                                <th>Tescil Tarihi</th>
+                                <th>Durumu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in patent %}
+                        <tr>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.get_model_display}}</a></td>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.get_area_display}}</a></td>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.code}}</td>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.apldate}}</a></td>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.aprdate|default_if_none:"Tescillenmedi"}}</a></td>
+                            <td><a href="{% url 'core:patentduzenle' i.id %}">{{i.get_situation_display}}</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if patent.has_other_pages %}
+            <ul class="pagination">
+                {% if patent.has_previous %}
+                    <li><a href="?page={{ patent.previous_page_number }}">Önceki</a></li>
+                {% else %}
+                <li class="disabled"><span></span></li>
+                {% endif %}
+            {% for i in patent.paginator.page_range %}
+                {% if library.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+                {% if patent.has_next %}
+                <li><a href="?page={{ patent.next_page_number }}">Sonraki</a></li>
+                {% else %}
+                <li class="disabled"><span></span></li>
+            {% endif %}
+            </ul>
+            {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="card mt-3">
+                    <div class="card-header text-gray-100 bg-dark ">
+                        <p class="text-md-center h3 ">Makale - Bildiri - Poster Tablosu</p>
+                    </div>
+                    <table class="table table-responsive-sm table-hover table-outline  mb-5">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Tanım</th>
+                                <th class="text-center">Adı</th>
+                                <th style="width:  12%">Yayın Tarihi</th>
+                                <th class="text-center">Yazarlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in bildiri %}
+                            <tr>
+                                <td><a href="{% url 'core:bildiriduzenle' i.id %}">{{i.get_typ_display}}</a></td>
+                                <td><a href="{% url 'core:bildiriduzenle' i.id %}">{{i.name}}</a></td>
+                                <td><a href="{% url 'core:bildiriduzenle' i.id %}">{{i.pubdate}}</a></td>
+                                <td><a href="{% url 'core:bildiriduzenle' i.id %}">{{i.owner}}</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+var label = [{% for i in patentsum %}"{{i.year|date:'Y'}}",{% endfor %}]
+var ulusalpatent = [{% for i in patentsum %}{{i.ulusalp|default_if_none:0|safe}},{% endfor %}]
+var uluslararasıpatent = [{% for i in patentsum %}{{i.uluslararasip|default_if_none:0|safe}},{% endfor %}]
+var ulusalmodel = [{% for i in patentsum %}{{i.ulusalm|default_if_none:0|safe}},{% endfor %}]
+var uluslararasımodel = [{% for i in patentsum %}{{i.uluslararasim|default_if_none:0|safe}},{% endfor %}]
+
+var ctx = document.getElementById('myChart1').getContext('2d');
+var myChart1 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: label,
+        datasets: [{
+            label: 'Ulusal Patent',
+            backgroundColor: "#203cb1",
+            stack: 'Stack 0',
+            yAxisID: "bar-y-axis",
+            data: ulusalpatent,
+        }, {
+            label: 'Uluslararası Patent',
+            backgroundColor: "#2a6fdb",
+            stack: 'Stack 0',
+            yAxisID: "bar-y-axis",
+            data: uluslararasıpatent,
+        }, {
+            label: 'Ulusal Model',
+            backgroundColor: "#26a6a2",
+            stack: 'Stack 1',
+            yAxisID: "bar-y-axis",
+            data: ulusalmodel,
+        }, {
+            label: 'Uluslararası Model',
+            backgroundColor: "#81e9e6",
+            stack: 'Stack 1',
+            yAxisID: "bar-y-axis",
+            data: uluslararasımodel, 
+        }]
+    },
+    options: {
+        title: {
+        display: true,
+        text: "Patent ve Faydalı Modeller",
+        fontSize: 32,
+        },
+        tooltips: {
+        mode: 'label'
+        },
+        responsive: true,
+        scales: {
+        xAxes: [{
+            stacked: true,
+        }],
+        yAxes: [{
+            id: "bar-y-axis",
+            ticks: {
+                precision: 0,
+                stepSize: 1,
+            },
+            display: true, //optional
+            type: 'linear'
+        }]
+        }
+    }
+});
+
+var label = [{% for i in bildirisum %}"{{i.year|date:'Y'}}",{% endfor %}]
+var ulusalmakale = [{% for i in bildirisum %}{{i.ulusalm|default_if_none:0|safe}},{% endfor %}]
+var uluslararasımakale = [{% for i in bildirisum %}{{i.uluslararasim|default_if_none:0|safe}},{% endfor %}]
+var ulusalbildiri = [{% for i in bildirisum %}{{i.ulusalb|default_if_none:0|safe}},{% endfor %}]
+var uluslararasıbildiri = [{% for i in bildirisum %}{{i.uluslararasib|default_if_none:0|safe}},{% endfor %}]
+var ulusalposter = [{% for i in bildirisum %}{{i.ulusalp|default_if_none:0|safe}},{% endfor %}]
+var uluslararasıposter = [{% for i in bildirisum %}{{i.uluslararasip|default_if_none:0|safe}},{% endfor %}]
+var ctx = document.getElementById('myChart2').getContext('2d');
+var myChart2 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: label,
+        datasets: [{
+            label: 'Ulusal Makale',
+            backgroundColor: "rgba(25, 32, 131, 0.7)",
+            stack: 'Stack 0',
+            yAxisID: "bar-y-axis",
+            data: ulusalmakale,
+        }, {
+            label: 'Uluslararası Makale',
+            backgroundColor: "rgba(0, 99, 132, 0.7)",
+            stack: 'Stack 0',
+            yAxisID: "bar-y-axis",
+            data: uluslararasımakale,
+        }, {
+            label: 'Ulusal Bildiri',
+            backgroundColor: "rgba(54, 162, 235, 0.7)",
+            stack: 'Stack 1',
+            yAxisID: "bar-y-axis",
+            data: ulusalbildiri,
+        }, {
+            label: 'Uluslararası Bildiri',
+            backgroundColor: "rgba(0, 120, 132, 0.7)",
+            stack: 'Stack 1',
+            yAxisID: "bar-y-axis",
+            data: uluslararasıbildiri, 
+        }, {
+            label: 'Ulusal Poster',
+            backgroundColor: "rgba(54, 162, 235, 0.7)",
+            stack: 'Stack 2',
+            yAxisID: "bar-y-axis",
+            data: ulusalposter,
+        }, {
+            label: 'Uluslararası Poster',
+            backgroundColor: "rgba(0, 120, 132, 0.7)",
+            stack: 'Stack 2',
+            yAxisID: "bar-y-axis",
+            data: uluslararasıposter, 
+        }]
+    },
+    options: {
+        title: {
+        display: true,
+        text: "Yayın ve Bildiriler",
+        fontSize: 32,
+        },
+        tooltips: {
+        mode: 'label'
+        },
+        responsive: true,
+        scales: {
+        xAxes: [{
+            stacked: true,
+        }],
+        yAxes: [{
+            id: "bar-y-axis",
+            ticks: {
+                precision: 0,
+                stepSize: 1,
+            },
+            display: true, //optional
+            type: 'linear'
+        }]
+        }
+    }
+});
+</script>
+{% endblock %}

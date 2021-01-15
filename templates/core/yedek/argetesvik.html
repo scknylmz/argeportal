@@ -1,0 +1,217 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active"><a href="{% url 'core:index' %}">Ana Sayfa</a></li>
+<li class="breadcrumb-item passive">AR-Ge Teşvik</li>
+{% endblock breadcrumb%}
+
+
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <a class="btn btn-gray-100 btn-outline-blue", href="#"><i class="fa fa-hand-holding-usd"></i> Teşvik Verisi Ekle</a>
+    <a class="btn btn-gray-100 btn-outline-blue", href="#"><i class="fa fa-download"></i> Export</a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="animated-fadeIn">
+        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card bg-gray-200 h-75">
+                                    <div class="card-body pt-0 pb-0 pr-2">
+                                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Arge Harcaması </i>
+                                        <p class="h1 text-gray-700">{{harcama.outcome|floatformat:"2"|intcomma}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-gray-200 h-75">
+                                    <div class="card-body pt-0 pb-0 pr-2">
+                                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Arge Teşviği </i>
+                                        <p class="h1 text-gray-700">{{harcama.totaltesvik|floatformat:"2"|intcomma}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-gray-200 h-75">
+                                    <div class="card-body pt-0 pb-0 pr-2">
+                                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Nakit Teşvik </i>
+                                        <p class="h1 text-gray-700">{{harcama.income|floatformat:"2"|intcomma}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card-group">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12" style="height:100%">
+                                                        <div class="btn-group" role="group">
+                                                            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-filter text-dark"></i></button>
+                                                            <div class="dropdown-menu dropdown-menu-left">
+                                                                <a class="dropdown-item btn" onclick="lastyearChart()"><i class="fa fa-chart-line"></i> Mevcut Yıl</a>
+                                                                <a class="dropdown-item btn" onclick="last1yearChart()"><i class="fa fa-chart-line"></i> Önceki Yıl</a>
+                                                            </div>
+                                                        </div>
+                                                        <canvas id="myChart1" height="100"></canvas>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+var last1hibe = [{% for i in argetesvik_last1 %}{{i.hibe|safe}},{% endfor %}];
+var last1SGK = [{% for i in argetesvik_last1 %}{{i.sgktesvik5746|safe}},{% endfor %}];
+var last1gelir = [{% for i in argetesvik_last1 %}{{i.gelirtesvik5746|safe}},{% endfor %}];
+var last1vergi = [{% for i in argetesvik_last1 %}{{i.argeindirim|safe}},{% endfor %}];
+var last1harcama = [{% for i in argetesvik_last1 %}{{i.argetotal|safe}},{% endfor %}];
+var last1oran = [{% for i in argetesvik_last1 %}{{i.ayliktesvikyuzde|safe}},{% endfor %}];
+var last1label = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+var lasthibe = [{% for i in argetesvik_last %}{{i.hibe|safe}},{% endfor %}];
+var lastSGK = [{% for i in argetesvik_last %}{{i.sgktesvik5746|safe}},{% endfor %}];
+var lastgelir = [{% for i in argetesvik_last %}{{i.gelirtesvik5746|safe}},{% endfor %}];
+var lastvergi = [{% for i in argetesvik_last %}{{i.argeindirim|safe}},{% endfor %}];
+var lastharcama = [{% for i in argetesvik_last %}{{i.argetotal|safe}},{% endfor %}];
+var lastoran = [{% for i in argetesvik_last %}{{i.ayliktesvikyuzde|safe}},{% endfor %}];
+var lastlabel = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+
+var barChartData = {
+    labels: lastlabel,
+    datasets: [{
+    data: lastoran,
+    type: 'line',
+    label: 'Arge Teşvik Oranı',
+    yAxisID: 'A',
+    fill: false,
+    backgroundColor: "#fff",
+    borderColor: "#588c7e",
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    lineTension: 0.3,
+    pointBackgroundColor: "#fff",
+    pointBorderColor: "#588c7e",
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: "#588c7e",
+    pointHoverBorderColor: "#588c7e",
+    pointHoverBorderWidth: 2,
+    pointRadius: 4,
+    pointHitRadius: 10
+    }, {
+    label: 'TEYDEB Hibesi',
+    backgroundColor: "#feb236",
+    stack: 'Stack 0',
+    yAxisID: "bar-y-axis",
+    data: lasthibe,
+    }, {
+    label: '5746 Arge SGK Arge Teşviki',
+    backgroundColor: "#ff7b25",
+    stack: 'Stack 0',
+    yAxisID: "bar-y-axis",
+    data: lastSGK,
+    }, {
+    label: '5746 Arge Gelir Vergisi',
+    backgroundColor: "#c1502e",
+    stack: 'Stack 0',
+    yAxisID: "bar-y-axis",
+    data: lastgelir,
+    }, {
+    label: 'Kurumlar/Geçici Vergi İnd.',
+    backgroundColor: "#d64161",
+    stack: 'Stack 0',
+    yAxisID: "bar-y-axis",
+    data: lastvergi, 
+    }, {
+    label: 'Toplam Arge Harcaması',
+    backgroundColor: "#87bdd8",
+    stack: 'Stack 1',
+    yAxisID: "bar-y-axis",
+    data: lastharcama,
+    }]
+};
+    function lastyearChart() {
+            barChartData.labels = lastlabel;
+            barChartData.datasets[0].data = lastoran;
+            barChartData.datasets[1].data = lasthibe;
+            barChartData.datasets[2].data = lastSGK;
+            barChartData.datasets[3].data = lastgelir;
+            barChartData.datasets[4].data = lastvergi;
+            barChartData.datasets[5].data = lastharcama;
+            barChartData.update();
+        };
+    function last1yearChart() {
+            barChartData.labels = last1label;
+            barChartData.datasets[0].data = last1oran;
+            barChartData.datasets[1].data = last1hibe;
+            barChartData.datasets[2].data = last1SGK;
+            barChartData.datasets[3].data = last1gelir;
+            barChartData.datasets[4].data = last1vergi;
+            barChartData.datasets[5].data = last1harcama;
+            barChartData.update();
+        };
+
+
+    var ctx = document.getElementById("myChart1").getContext("2d");
+    var myChart1 = new Chart(ctx, {
+    type: 'bar',
+    data: barChartData,
+    options: {
+        title: {
+        display: true,
+        text: "Ar-Ge Teşvik Oranı",
+        fontSize: 32,
+        },
+        tooltips: {
+        mode: 'label'
+        },
+        responsive: true,
+        scales: {
+        xAxes: [{
+            stacked: true,
+        }],
+        yAxes: [{
+            id: "bar-y-axis",
+            stacked: true,
+            display: true, //optional
+            type: 'linear'
+        },
+        {
+            id: "A",
+            stacked: true,
+            position: "right",
+            display: true, //optional
+            ticks: {
+            beginAtZero: true,
+            min: 0,
+            max: 100
+            },
+            type: 'linear'
+        }]
+        }
+    }
+    });
+    
+</script>
+{% endblock %}

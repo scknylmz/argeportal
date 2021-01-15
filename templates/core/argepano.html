@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'core:index' %}">Ana Sayfa</a></li>
+<li class="breadcrumb-item">Göstergeler</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+<body class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card-group">
+                    <div class="card text-dark text-center bg-white py-0 border-0" style="width=500px">
+                        <a href="{% url 'core:chartPersonel' %}" class="text-info">
+                        <img class="card-img-top" src="{% static 'core/avatar/RD_personel3.jpg' %}" alt="Card image">
+                        <div class="card-body">
+                            <h1 class="card-title">Personel Göstergeleri</h1>
+                            <a href="{% url 'core:chartPersonel' %}" class="card-block stretched-link text-decoration-none"></a>
+                        </div>
+                    </div>
+                    <div class="card text-dark text-center bg-white py-0 border-0" style="width=500px">
+                        <a href="{% url 'core:chartProjects' %}" class="text-cyan">
+                        <img class="card-img" src="{% static 'core/avatar/RD_projects3.jpg' %}" alt="Card image">
+                        <div class="card-body">
+                            <h1 class="card-title">Proje Göstergeleri</h1></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

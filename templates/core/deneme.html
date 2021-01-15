@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block extrahead %}
+
+{% endblock extrahead %}
+
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{form.media}}
+                                <h1><i class="fa fa-newspaper"></i> Haber Kayıt</h1>
+                                <p class="text-muted">Ar-Ge Merkezi Haber Kayıt Formu</p>
+                                {{form|crispy}}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary px-4">Kaydet</button>
+                                        <button type="submit" class="btn btn-danger px-4">Sil</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+{% for i in queryset %}
+<h2>DENEME</h2>
+<p>{{i.tarih}}</p>
+<p>{{i.projeAdam.all|join:", "}}</p>
+{% for x in i.projeAdam.all %}{{x}}{% endfor %}
+{% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:personel' %}" >Haberler</a></li>
+        <li class="breadcrumb-item passive">Haber Bakımı</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{form.media}}
+                                <h1><i class="fa fa-newspaper"></i> Haber Güncelle</h1>
+                                <p class="text-muted">Ar-Ge Merkezi Haber Güncelle Formu</p>
+                                {{form|crispy}}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary px-4">Güncelle</button>
+                                        <a href="../delete/{{form.id}}" class="btn btn-danger">Sil</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+                                
+   
+
+{% endblock content %}

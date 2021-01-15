@@ -1,0 +1,118 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Supsan - Arge Portalı">
+  <meta name="author" content="Seckin Yilmaz">
+  <meta name="keyword" content="Ar-GE, Supsan, Portal, Proje">
+  <title>Supsan Ar-Ge Portalı</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/8014b25377.js" crossorigin="anonymous"></script>  
+  <link href="{% static 'core/css/simple-line-icons.min.css' %}" rel="stylesheet">
+
+  <!-- Main styles for this application -->
+  <link href="{% static 'core/css/estilo.css' %}" rel="stylesheet">
+  <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'core/css/carousel.css' %}" rel="stylesheet">
+
+  <!-- Chart -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+  <!-- Extra Head -->
+  {% block extrahead %}
+  
+  {% endblock extrahead %}
+</head>
+
+{% block body %}
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+
+  {% include "core/includes/navbar.html" %}
+
+  {% include "core/includes/sidebar.html" %}
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Breadcrumb -->
+      <ol class="breadcrumb">
+        {% block breadcrumb %}
+
+        {% endblock breadcrumb%}
+        <li class="breadcrumb-menu d-md-down-none">
+          <div class="btn-group" role="group" aria-label="Button group">
+        {% block breadcrumb_menu %}
+        
+        {% endblock breadcrumb_menu %}
+          </div>
+        </li>
+        
+        <!-- Breadcrumb Menu-->
+
+      </ol>
+      
+        {% if messages %}
+    
+            {% for message in messages %}
+            
+            {% if message.tags == "info" %}
+                <div class="alert alert-danger">{{ message }}</div>    
+            {% else %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endif %}
+                
+        {% endfor %}
+    
+        {% endif %}
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+
+  </div>
+
+  <footer class="app-footer">
+    <span><a href="scknylmz@yahoo.com">Copyright</a> © 2020 | Python Developed by Seçkin YILMAZ.</span>
+    <!--<span class="ml-auto">Powered by <a href="http://coreui.io">CoreUI</a></span>-->
+  </footer>
+  
+  <!-- Bootstrap and necessary plugins -->
+    <script src="{% static 'core/vendors/js/jquery.min.js'%}"></script>
+    <script src="{% static 'core/vendors/js/popper.min.js'%}"></script>
+    <script src="{% static 'core/vendors/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'core/vendors/js/pace.min.js'%}"></script>
+    
+
+  <!-- CoreUI main scripts -->
+
+    <script src="{% static 'core/js/app.js'%}"></script>
+
+  <!-- Plugins and scripts required by this views -->
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"> 
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <script>
+  $(document).ready(function() {
+      $('.datepicker').datepicker();
+  });
+  </script>
+
+  <!-- Custom scripts required by this view -->
+    <script src="{% static 'core/js/main.js'%}"></script>
+
+  {% block js %}
+  {% endblock js %}
+
+  <script>
+    {% block jquery %}{% endblock %}
+  </script>
+
+</body>
+{% endblock body %}
+</html>

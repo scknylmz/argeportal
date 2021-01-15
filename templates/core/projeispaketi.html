@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectsmain' %}" >Projeler</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core:projectdetail' project.id %}">Proje Detayı</a></li>
+        <li class="breadcrumb-item passive">İş Paketleri</li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:addispaketi' %}"><i class="fa fa-plus-circle"></i>  İş Paketi Ekle</a>
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:exportprojects' %}"><i class="fa fa-download"></i>  Export</a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block content %}
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <strong> {{project.ProjeKodu}} İş Paketi Listesi</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="font-weight-normal">* İş Paketini Güncellemek İçin Tıklayınız...</p>
+                    <div class="col-sm-12">
+                    <table class="table table-responsive-sm table-hover table-outline mb-5">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Paket No</th>
+                                <th>İş Paketi Adı*</th>
+                                <th>Başlangıç Tarihi</th>
+                                <th>Bitiş Tarihi</th>
+                                <th>İş Paketi Sorumlusu</th>
+                                <th>Tamamlanma Oranı</th>
+                                <th>Yapılacak Faaliyet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for query in querylist %}
+                            <tr>
+                                <td class="text-center font-weight-bold">{{query.isPaketino}}</td>
+                                <td><a href="{% url 'core:projeispaketiupdate' query.id %}">{{query.isPaketiadi}}</a></td>
+                                <td>{{query.baslangicTarihi}}</td>
+                                <td>{{query.bitisTarihi}}</td>
+                                <td>{{query.sorumlu}}</td>
+                                <td>{{query.tamamlanmaOranı}}</td>
+                                <td>{{query.faaliyet}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    
+                    
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}

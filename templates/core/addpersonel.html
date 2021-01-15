@@ -1,0 +1,293 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:personelmain' %}" >Personel</a></li>
+        <li class="breadcrumb-item passive">Personel Kayıt</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data" id="myForm">
+                                {% csrf_token %}
+                                <h1><i class="fa fa-user-plus"></i> Personel Kayıt</h1>
+                                <p class="text-center font-2xl">Ar-Ge Personeli Kayıt Formu</p>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Adı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-user-alt"></i></span>
+                                        </div>
+                                        {{ form.name}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Soyadı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-users"></i></span>
+                                        </div>
+                                        {{ form.surName}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">E-Mail</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-at"></i></span>
+                                        </div>
+                                        {{ form.email}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Cinsiyet</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
+                                        </div>
+                                        {{ form.gender}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Doğum Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-birthday-cake"></i></span>
+                                        </div>
+                                        {{ form.birthDay}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">T.C. Numarası</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-id-card"></i></span>
+                                        </div>
+                                        {{ form.idName}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Uyruk</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-flag"></i></span>
+                                        </div>
+                                        {{ form.country}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Sicil Numarası</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                                        </div>
+                                        {{ form.sNumber}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Sosyal Güvenlik Numarası</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                                        </div>
+                                        {{ form.sgNumber}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Çalıştığı Departman</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-building"></i></span>
+                                        </div>
+                                        {{ form.department}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Ar-Ge Merkezindeki Görevi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-database"></i></span>
+                                        </div>
+                                        {{ form.respons}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">İşe Başlangıç Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-plus"></i></span>
+                                        </div>
+                                        {{ form.startDate}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">İşten Ayrılış Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-minus"></i></span>
+                                        </div>
+                                        {{ form.finisDate}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Ar-Ge Merkezinde Başlama Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-plus"></i></span>
+                                        </div>
+                                        {{ form.rdStartDate}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Ar-Ge Merkezinden Ayrılış Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-minus"></i></span>
+                                        </div>
+                                        {{ form.rdfinisDate}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Tahsil Durumu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-graduation-cap"></i></span>
+                                        </div>
+                                        {{ form.graduated}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Lise Adı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.hschool}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Lise Bölümü</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.hschooldist}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite (Ön Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.huschool}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Bölümü (Ön Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.huschooldist}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite (Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.university}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Bölümü (Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.universitydist}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite (Yüksek Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.masteruniversity}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Bölüm (Yüksek Lisans)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.masteruniversitydist}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite (Doktora)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.druniversity}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Bölüm (Doktora)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.druniversitydist}}
+                                    </div>
+                                </div>
+                                
+                                <label class="col-form-label font-weight-bold">Kullanıcı Resmi</label>      
+                                        {{ form.userImg}}
+                                        <hr>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Kaydet</button>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Personeli <strong>Kaydetmek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+          
+
+{% endblock content %}

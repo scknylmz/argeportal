@@ -1,0 +1,114 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+enctype="multipart/form-data"
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:patent' %}" >Ar-Ge Fikri Mülkiyet</a></li>
+        <li class="breadcrumb-item passive">Bildiri Kayıt</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data" id="myForm">
+                                {% csrf_token %}
+                                <h1><i class="fa fa-book-medical"></i> Bildiri Kayıt</h1>
+                                <p class="text-center font-2xl">Makale / Bildiri / Poster Kayıt Formu</p>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Konu Tipi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-bookmark"></i></span>
+                                        </div>
+                                        {{ form.typ}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Kapsam</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-globe-europe"></i></span>
+                                        </div>
+                                        {{ form.area}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Konu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-bookmark-o"></i></span>
+                                        </div>
+                                        {{ form.name}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Yayınlanan Yer</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-globe"></i></span>
+                                        </div>
+                                        {{ form.location}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Yayın Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                        </div>
+                                        {{ form.pubdate}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Yayın Sahibi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                        </div>
+                                        {{ form.owner}}
+                                    </div>
+                                </div>
+                                <label class="col-form-label font-weight-bold">Dosya Ekle</label>      
+                                        {{ form.file_bildiri}}
+                                        <hr>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Kaydet</button>                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Bildiriyi <strong>Kaydetmek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+          
+
+{% endblock content %}

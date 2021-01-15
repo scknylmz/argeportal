@@ -1,0 +1,220 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item passive">Adam-Ay Liste</li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:adamaymain' %}"><i class="fa fa-diagnoses"></i> Proje Adam/Ay Ekle</a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block content %}
+<div class="col-sm-10 offset-1">
+    <div class="card">
+        <div class="card-header">
+            {% if today %}
+            <i class="fa fa-calendar"></i><strong>{{today|date:"Y F"}}  Adam/Ay Listesi</strong>
+            {% else %}
+            <i class="fa fa-calendar"></i><strong>{{year}} {{month}} 'inci Ayı Adam/Ay Listesi</strong>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-12">
+                    <p>İstemiş Olduğunuz Ayı Seçerek O Aya Ait Tüm Adam/Ay Oranlarını Listeleyebilirsiniz...</p>
+                    <form>
+                        {% csrf_token %}
+                        <div class="input-group">
+                        <input type="date", name="keyword", class="input-group-sm form-control", maxlength="64", placeholder="Ara">
+                        <button type="submit", class="btn btn-gray-100 btn-outline-blue"><i class="fa fa-search"></i> Dönem Ara</button>
+                        </div>
+                    </form>
+                    </div>
+                <br>
+                <ul class="horizontal-bars type-2">
+                    <li class="divider"></li>
+                    <li>
+                        
+                        <p class="title font-italic font-2xl"><i class="fa fa-percent"></i>Arge Personellerinin Mevcut Dönem İçerisinde Projelere Katılım Oranı </p>
+                        <p class="value h3">{{ ratio.totalmanmonth|floatformat:2 }}</p>
+                        <li class="divider"></li>
+                        <div class="bars">
+                            <div class="progress progress-xl">
+                                <div class="progress-bar-striped bg-warning" role="progressbar" style="width: {% widthratio ratio.totalmanmonth 100 100 %}%"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <hr>
+                </ul>
+                    <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i></th>
+                                <th>Personel</th>
+                                <th class="text-center">Adam/Ay Oranı</th>
+                                <th class="text-center">Atanılmış Proje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for query in queryset %}
+                            <tr>
+                                <td class="text-center">
+                                    <div class="avatar">
+                                        {% if query.user_img %}
+                                            <img src="{% get_media_prefix %}{{query.user_img}}" class="img-avatar" alt="blabla">
+                                        {% else %}
+                                            <img src="{% static 'core/avatar/blank_profile.png' %}" class="img-avatar">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td><a href="addmanmonthid/{{query.id}}">{{query.projeAdamAy__name}} {{query.projeAdamAy__surName}}</a></td>
+                                <td>
+                                {% if query.user_respons == 3 %} 
+                                <div class="clearfix">
+                                    <div class="float-left">
+                                        <strong>{% widthratio query.total_manmonth 0.8 100%}% </strong>
+                                    </div>
+                                    <div class="float-right">
+                                        <small class="text-muted">Adam Ay</small>
+                                    </div>
+                                </div>
+                                        {% if query.total_manmonth > 0.80 %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {% widthratio query.total_manmonth 0.8 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% elif query.total_manmonth|floatformat == "0.8" %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-succes" role="progressbar" style="width: {% widthratio query.total_manmonth 0.8 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% else %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio query.total_manmonth 0.8 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                    <div class="clearfix">
+                                    <div class="float-left">
+                                        <strong>{% widthratio query.total_manmonth 1 100%}%</strong>
+                                    </div>
+                                    <div class="float-right">
+                                        <small class="text-muted">Adam Ay</small>
+                                    </div>
+                                </div>
+                                        {% if query.total_manmonth > 1 %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {% widthratio query.total_manmonth 1 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% elif query.total_manmonth == 1 %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-succes" role="progressbar" style="width: {% widthratio query.total_manmonth 1 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% else %}
+                                        <div class = "progress progress-xs">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio query.total_manmonth 1 100 %}%" aria-valuenow={{query.total_manmonth}} aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td class="text-center"><span class="badge badge-pill badge-dark"> {{query.total_project}}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <strong> Ar-Ge PYP Oranları Listelenmektedir</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+            <div class="col-sm-12">
+                <div class="card-group">
+                    <div class="card ">
+                        <div class="card-body">
+    <table id="table_id" class="display nowrap" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Personel Numarası</th>
+                <th>İsim Soyisim</th>
+                <th>Geçerlilik Başlangıcı</th>
+                <th>Geçerlilik Sonu</th>
+                <th>Dağıtım</th>
+                <th>Şirket Kodu</th>
+                <th>Masraf Yeri</th>
+                <th>PYP Öğesi</th>
+                <th>Oran (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for i in querysetlist %}
+                        <td>{{i.user_number}}</td>
+                        <td>{{i.isim}} {{i.soyisim}}</td>
+                        <td>01/{{month}}/{{year}}</td>
+                        <td>30/{{month}}/{{year}}</td>
+                        <td></td>
+                        <td>0033</td>
+                        <td>{{i.expensecenter}}</td>
+                        <td>{{i.pyp_oge}}</td>
+                        <td>{{i.oran}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/jq-3.3.1/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-html5-1.6.5/cr-1.5.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sp-1.2.1/sl-1.3.1/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/ju/jq-3.3.1/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-html5-1.6.5/cr-1.5.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sp-1.2.1/sl-1.3.1/datatables.min.js"></script>
+
+<script>
+$(document).ready( function () {
+    $('#table_id').DataTable({
+    dom: 'B<"clear">lfrtip',
+    buttons: {
+        name: 'primary',
+        buttons: [ 'copy', 'csv', 'excel', 'pdf' ]
+            },
+        "scrollX" : true
+    }
+    );
+} );
+</script>
+{% endblock js %}
+
+<script>
+    dom: 'B<"clear">lfrtip',
+    buttons: {
+        name: 'primary',
+        buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
+        
+
+        }}
+    );
+} );
+</script>
+
+ 

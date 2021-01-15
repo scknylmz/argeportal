@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h1><i class="fa fa-id-card-alt"></i> Adam/Ay Kayıt</h1>
+                            {% for field in form %}
+                                {% if forloop.counter <= 1 %}
+                                <p class="text-left font-xl">Proje Kodu: {{field.instance.projeKodu}} </p>
+                                {% endif %}
+                            {% endfor %}
+                        <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i>Personel Adı</th>
+                                <th class="text-center">Adam/Ay Dönemi</th>
+                                <th>Adam/Ay Oranı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ form.management_form }}
+                            {% for field in form %}
+                            <tr>
+                                <td>
+                                <div><a>{{field.instance.projeAdamAy}} </a></div>
+                                </td>
+                                <td>
+                                <div><a>{{field.tarih|as_crispy_field}} </a></div>
+                                </td>
+                                <td>
+                                <div><a>{{field.adamAylar|as_crispy_field}} </a></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-4">Ekle</button>
+                            </div>
+                        </div>
+                     </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+{% endblock content %}

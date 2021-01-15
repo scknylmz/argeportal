@@ -1,0 +1,131 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectsmain' %}" >Projeler</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectdetail' query.projeKodu_id %}" >Proje Detayı</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projeispaketi' query.projeKodu_id %}" >İş Paketleri</a></li>
+        <li class="breadcrumb-item passive">İş Paketi Güncelle</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                        <form method="POST" action="" enctype="multipart/form-data" id="myForm">
+                        {% csrf_token %}
+                        <h1><i class="fa fa-chart-bar"></i> İş Paketi Güncelle</h1>
+                        <p class="h6"> {{form.instance.projeKodu}} Ar-Ge Projesi İçin İş Paketi Güncelleme Formu </p>
+                        {{ formset.management_form }}
+                        {{form.projeKodu.as_hidden}}
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketi Numarası</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.isPaketino}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketinin Adı</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.isPaketiadi}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketinden Sorumlu</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.sorumlu}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketi Başlangıç Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.baslangicTarihi}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketi Tamamlanma Tarihi</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.bitisTarihi}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Pkaetinin Tamamlanma Oranı</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.tamamlanmaOranı}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label font-weight-bold">İş Paketinin Yapılacak Faaliyet</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                    </div>
+                                    {{ form.faaliyet}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Güncelle</button>                                        
+                                </div>
+                            </div>
+                     </form>
+                     <!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Bu İş Paketini  <strong>Güncellemek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-md-4">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>
+        
+
+{% endblock content %}

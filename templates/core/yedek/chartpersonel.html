@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'core:index' %}">Ana Sayfa</a></li>
+<li class="breadcrumb-item">Personel Göstergeleri</li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+
+{% endblock breadcrumb_menu %}
+
+
+{% block content %}
+<canvas id="myChart1" width="400" height="400"></canvas>
+<canvas id="myChart2" width="400" height="400"></canvas>
+
+
+<script src="{% static 'core/js/charts.js' %}"> </script>
+
+{% endblock content %}

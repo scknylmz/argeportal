@@ -1,0 +1,112 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:personelmain' %}" >Personeller</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:personeldetail' person.id %}" >Personel Detayı</a></li>
+        <li class="breadcrumb-item">Adam-Ay Güncelle</li>
+{% endblock breadcrumb%}
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i>
+            Personel Güncellemeleri
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item", href="{% url 'core:personelupdate' person.id %}"><i class="fa fa-retweet"></i> Personel Güncelle </a>
+                <a class="dropdown-item", href="{% url 'core:addmanmonthid' person.id %}"><i class="fa fa-diagnoses"></i> Adam/Ay Güncelle </a>
+                <a class="dropdown-item", href="#"><i class="fa fa-clipboard-list"></i> Nacusapr</a>
+            </div>
+        </div>
+        <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:addpersonel' %}"><i class="fa fa-user-plus"></i> Personel Ekle </a>
+        <a class="btn" href="{% url 'core:exportPerson' person.id %}"><i class="fa fa-download"></i> Personel Export </a>
+    </div>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+{% block content %}
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                        <h1><i class="fa fa-diagnoses"></i> Adam/Ay Güncelle</h1>
+                        <p class="text text-muted"> Personelin Adam/Ay Oranını Döneme Göre Güncelleyebilirsiniz...</p>
+                        
+                        {% for form in formset %}
+                            {% if forloop.counter <= 1 %}
+                            <p class="text-left font-xl">Personel: {{form.instance.projeAdamAy}}</p>
+                            <strong>Toplam Adam/Ay Oranı </strong><span class="badge badge-red" > {{query.adamAylar__sum|floatformat:2}} </span>
+                            <hr>
+                            {% endif %}
+                        {% endfor %}
+                
+                        <form>
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="date", name="keyword", class="input-group-sm form-control", maxlength="64", placeholder="Ara">
+                            <button type="submit", class="btn btn-gray-100 btn-outline-blue"><i class="fa fa-search"></i> Dönem Ara</button>
+                        </div>
+                        </form>
+                        <br>
+                        <div class="col-sm-12">  
+                        <form id="myForm" method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th><i class="fa fa-gavel"></i> Proje </th>
+                                        <th>Adam/Ay Oranı</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{ formset.management_form }}
+                                    {% for form in formset %}
+                                        {% for hidden in form.hidden_fields %}
+                                            {{ hidden.errors }}
+                                            {{hidden}}
+                                        {% endfor %}
+                                    <tr>
+                                        <td><div><a>{{form.instance.projeKodu}} </a></div></td>
+                                        <td><div><a>{{form.errors}}{{form.adamAylar|as_crispy_field}} </a></div></td>
+                                    </tr>
+                                </tbody>
+                                    {% endfor %}
+                            </table>
+                            <div class="row">
+                                <div class="col-12">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Güncelle</button>                                        
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+    </div>
+</div>
+        
+<!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{personel.name}} İsimli Personelde Yapığınız Adam Ay Güncellemeleri <strong>Kaydetmek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary px-4" form="myForm">Ekle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

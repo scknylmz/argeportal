@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item passive">Personel Liste</a></li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+    <form>
+        {% csrf_token %}
+        <input type="text", name="keyword", class="input-group-sm", maxlength="64", placeholder="Ara">
+        <button type="submit", class="btn btn-gray-100 btn-outline-blue"><i class="fa fa-search"></i></button>
+    </form>
+    {% if user.is_authenticated  %}
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:addpersonel' %}"><i class="fa fa-user-plus"></i>  Personel Ekle</a>
+    <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:exportprojects' %}"><i class="fa fa-download"></i>  Export</a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <strong> {{personels.count}} Ar-Ge Personeli {{personels_active.count}} Aktif Personel</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i></th>
+                                <th>Personel Adı</th>
+                                <th class="text-center">Görev Aldığı Proje Sayısı</th>
+                                <th>Departmanı</th>
+                                <th>Durumu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- personel -->
+                            {% for personel in personels %}
+                            <tr>
+                                <td class="text-center">
+                                    <div class="avatar">
+                                        {% if personel.userImg %}
+                                            <img src="{{ personel.userImg.url }}" class="img-avatar" alt="{{ personel.email }}">
+                                        {% else %}
+                                            <img src="{% static 'core/avatar/blank_profile.png' %}" class="img-avatar">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div><a href="detail/{{personel.id}}">{{ personel.name }} {{ personel.surName }} </a></div>
+                                    <div class="small text-muted">
+                                    <span>Ar-Ge Merkezi Başlangıç:</span> | {{ personel.rdStartDate }}
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <div>{{ personel.department }}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="avatar">
+                                        {% if personel.finisDate %}
+                                            <img src="{% static 'core/avatar/tombstone.png' %}" class="img-avatar">
+                                        {% else %}
+                                            <span class="badge badge-info" style="width: 50px; height: 20px;">Çalışıyor</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- end user -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ {% endblock content %}

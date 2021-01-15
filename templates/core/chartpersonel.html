@@ -1,0 +1,199 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'core:index' %}">Ana Sayfa</a></li>
+<li class="breadcrumb-item">Personel Göstergeleri</li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+
+{% endblock breadcrumb_menu %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div id="ui-view" style="opacity: 1;">
+        <div class="jumbotron p-5 p-md-3 text-white rounded bg-dark">
+        <div class="animated fadeIn">
+        <h1 class="display-4 font-italic">Ar-Ge Merkezi Personel Göstergeleri</h1>
+        </div>
+        </div>
+    </div>
+</div>
+    <div class="container animated fadeIn">
+        <div class="row justify-content-center">
+                <div class="card-group">
+                    <div class="card p-5">
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <canvas id="myChart4"height="100"></canvas>
+                                </div>
+                                <div class="col-6 mt-5">
+                                <div class="col-12">
+                                    <canvas id="myChart3"  height="300"></canvas>
+                                </div>
+                                </div>
+                                <div class="col-6 mt-5">
+                                <div class="col-12">
+                                    <canvas id="myChart2" height="300"></canvas>
+                                </div>
+                                </div>
+                                <div class="col-12 mt-5">
+                                    <canvas id="myChart" height="150"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+<script>
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: {{label_edu|safe}},
+        datasets: [{
+            label: '# of Votes',
+            data: {{data_edu|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(100, 99, 132, 0.2)',
+                'rgba(200, 162, 235, 0.2)',
+                'rgba(215, 206, 86, 0.2)',
+                'rgba(40, 192, 192, 0.2)',
+                'rgba(20, 102, 255, 0.2)',
+                'rgba(50, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(100, 99, 132, 1)',
+                'rgba(200, 162, 235, 1)',
+                'rgba(215, 206, 86, 1)',
+                'rgba(40, 192, 192, 1)',
+                'rgba(20, 102, 255, 1)',
+                'rgba(50, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Eğitim Durumu Dağılımı",
+            fontSize: 24,
+        },
+        legend: {
+            position: 'top',
+        }
+    }
+});
+var ctx = document.getElementById('myChart2').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: {{label_gender|safe}},
+        datasets: [{
+            label: '# of Votes',
+            data: {{data_gender|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Kadın / Erkek Oranı",
+            fontSize: 24,
+        },
+        legend: {
+            position: 'top',
+        }
+    }
+});
+var ctx = document.getElementById('myChart3').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: {{label_respons|safe}},
+        datasets: [{
+            label: '# of Votes',
+            data: {{data_respons|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Görev Dağılımı",
+            fontSize: 24,
+        },
+        legend: {
+            position: 'top',
+        }
+    }
+});
+var ctx = document.getElementById('myChart4').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{label_worker|safe}},
+        datasets: [{
+            label: ' AR-Ge Personeli Sayısı',
+            data: {{data_worker|safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Ar-Ge Personel Sayısı",
+            fontSize: 24,
+        },
+        legend: {
+            display: false,
+        }
+    }
+});
+</script>
+
+{% endblock content %}

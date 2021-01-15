@@ -1,0 +1,166 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectsmain' %}" >Projeler</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectdetail' person.id %}" >Proje Detay</a></li>
+        <li class="breadcrumb-item passive">Adam-Ay Oranı Ekle</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                    {% if formset.forms %}
+                        <form method="POST" action="" enctype="multipart/form-data" id="myForm">
+                        {% csrf_token %}
+                        <h1><i class="fa fa-diagnoses"></i> Adam/Ay Kayıt</h1>
+                            {% for form in formset %}
+                                {% if forloop.counter <= 1 %}
+                                <p class="text-left font-xl">Proje Kodu: {{form.instance.projeKodu}} </p>
+                                {% endif %}
+                            {% endfor %}
+                            <p class="text text-muted">* Döneme Ait Bir Gün Giriniz...<p>
+                        <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="fa fa-user"></i>  Personel </th>
+                                <th class="text-center">Adam/Ay Dönemi *</th>
+                                <th>Adam/Ay Oranı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ formset.management_form }}
+                            {{ formset.non_field_errors }}
+                            {{ formset.source.errors }}
+                            {{ formset.source }}
+                            {% for form in formset %}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden.errors }}
+                                    {{hidden}}
+                                {% endfor %}
+                            <tr>
+                                <td>
+                                <div><a>{{form.instance.projeAdamAy}} </a></div>
+                                </td>
+                                <td>
+                                <div><a>{{form.tarih|as_crispy_field}} </a></div>
+                                </td>
+                                <td>
+                                <div><a>{{form.adamAylar|as_crispy_field}} </a></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Ekle</button>
+                            </div>
+                        </div>
+                     </form>
+                     {% else %}
+                     <div class="alert alert-danger">Bu Projeye Ait Personel Bulunmamaktadır...</div>
+                     {% endif %}
+                     <!-- Modal -->
+                    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p> Bu Projeye Eklediğiniz Adam/Ay Oranlarını  <strong>Kaydetmek İstiyor Musunuz?</strong></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+                                <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 ">
+            <div class="card position-fixed">
+                <div class="card card-header bg-danger">
+                    <p class="text-center h5">Adam Ay Oranları</p>
+                </div>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-filter text-dark"></i></button>
+                <div class="dropdown-menu dropdown-menu-left">
+                    <a class="dropdown-item btn" onclick="lastmonthChart()"><i class="fa fa-chart-line"></i>{{today|date:"Y F"}}</a>
+                    <a class="dropdown-item btn" onclick="last1monthChart()"><i class="fa fa-chart-line"></i>{{lastmonthdate|date:"Y F"}}</a>
+                </div>
+            </div>
+                <canvas id="myChart1" height="300%"></canvas>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>
+<script src="https://raw.githubusercontent.com/google/palette.js/master/palette.js"></script>
+<script>
+function dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+}
+function poolColors(a) {
+    var pool = [];
+    for(i = 0; i < a; i++) {
+        pool.push(dynamicColors());
+    }
+    return pool;
+}
+var last1data = [{% for i in last1month %}{{i.total_manmonth|safe}},{% endfor %}];
+var last1label = [{% for i in last1month %}"{{i.projeAdamAy__name}} {{i.projeAdamAy__surName}}",{% endfor %}];
+var lastdata = [{% for i in lastmonth %}{{i.total_manmonth|safe}},{% endfor %}];
+var lastlabel = [{% for i in lastmonth %}"{{i.projeAdamAy__name}} {{i.projeAdamAy__surName}}",{% endfor %}];
+var ctx = document.getElementById('myChart1').getContext('2d');
+var myChart1 = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: lastlabel,
+        datasets: [{
+            label: 'AdamAy Oranı',
+            data: lastdata,
+            backgroundColor: poolColors(lastdata.length)
+        }]
+    },
+    options: {
+        legend: {
+            display: false,       
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    stepSize: 0.1
+                }
+            }]
+        }
+    }
+});
+        function lastmonthChart() {
+            myChart1.data.labels = lastlabel;
+            myChart1.data.datasets[0].data = lastdata;
+            myChart1.update();
+        };
+        function last1monthChart() {
+            myChart1.data.labels = last1label;
+            myChart1.data.datasets[0].data = last1data;
+            myChart1.update();
+        };
+</script>
+
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% load static %}
+
+<div class="app-body">
+    <div class="sidebar">
+      <nav class="sidebar-nav">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:index' %}"><i class="fa fa-home"></i> Ana Sayfa</a>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-chart-bar"></i> Göstergeler</a>
+            <ul class="nav-dropdown-items">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fa fa-trophy"></i> Proje </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'core:chartPersonel' %}"><i class="fa fa-diagnoses"></i> Personel </a>
+            </li>
+            </ul>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-tachometer-alt"></i> Ar-Ge Panosu</a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:projectsmain' %}"><i class="fa fa-paper-plane ml-2"></i> Projeler</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:personelmain' %}"><i class="fa fa-user ml-2"></i> Personeller</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:adamaybase' %}"><i class="fa fa-diagnoses ml-2"></i> Adam Aylar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:argetesvik' %}"><i class="fa fa-wallet ml-2"></i> Teşvik </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:patent' %}"><i class="fa fa-book-open ml-2"></i> Fikri Mülkiyet </a>
+              </li>
+            </ul>
+          </li>
+
+          <!--<li class="nav-title">-->
+            <!--Theme-->
+          <!--</li>-->
+          <!--<li class="nav-item">-->
+            <!--<a href="colors.html" class="nav-link"><i class="fa fa-tint"></i> Colors</a>-->
+          <!--</li>-->
+          <!--<li class="nav-item">-->
+            <!--<a href="typography.html" class="nav-link"><i class="fa fa-user"></i> Typograhy</a>-->
+          <!--</li>-->
+          <li class="nav-title">
+            Admin Paneli
+          </li>
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-plus-square"></i> Eklemeler</a>
+            <ul class="nav-dropdown-items">
+              <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fa fa-plus ml-2"></i> Haber Ekle</a>
+                <a class="nav-link" href="#"><i class="fa fa-plus ml-2"></i> Personel Ekle</a>
+                <a class="nav-link" href="{% url 'core:addproject' %}"><i class="fa fa-plus ml-2"></i> Proje Ekle</a>
+                <a class="nav-link" href="#"><i class="fa fa-plus ml-2"></i> İş Paketi Ekle</a>
+                <a class="nav-link" href="#"><i class="fa fa-plus ml-2"></i> Departman Ekle</a>
+                <a class="nav-link" href="{% url 'core:adamaymain' %}"><i class="fa fa-street-view"></i> Proje Adam/Ay Ekle</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-puzzle-piece"></i> Raporlar</a>
+              <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'core:newstable' %}"><i class="fa fa-list ml-2"></i> Haber Listesi</a>
+                  <a class="nav-link" href="{% url 'core:personalstable' %}"><i class="fa fa-list ml-2"></i> Personel Listesi</a>
+                  <a class="nav-link" href="{% url 'core:projectstable' %}"><i class="fa fa-list ml-2"></i> Proje Listesi</a>
+                  <a class="nav-link" href="{% url 'core:departmentstable' %}"><i class="fa fa-list ml-2"></i> Departman Listesi</a>
+                </li>
+              </ul>
+          </li>
+        </ul>
+      </nav>
+      <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+    </div>

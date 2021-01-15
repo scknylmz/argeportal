@@ -1,0 +1,284 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectsmain' %}" >Projeler</a></li>
+        <li class="breadcrumb-item">Proje Detayı</li>
+{% endblock breadcrumb%}
+ 
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i>
+            Proje Güncellemeleri
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item", href="{% url 'core:projectupdate' project.id %}"><i class="fa fa-retweet"></i> Proje Güncelle </a>
+                <a class="dropdown-item", href="{% url 'core:addmanmonth' project.id %}"><i class="fa fa-diagnoses"></i> Adam/Ay Ekle </a>
+                <a class="dropdown-item", href="{% url 'core:projeispaketi' project.id %}"><i class="fa fa-clipboard-list"></i> İş Paketlerini Güncelle </a>
+            </div>
+        </div>
+        <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:addproject' %}"><i class="fa fa-gavel"></i> Proje Ekle </a>
+        <a class="btn" href="#"><i class="fa fa-download"></i> Proje Export </a>
+    </div>
+    
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block extrahead %}
+
+<!---->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('string', 'Resource');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+      data.addRows([
+        ['2014Spring', '{{project.ProjeKodu}}', '{{project.get_ProjeDurumu_display}}', 
+        new Date({{project.ProjeBaslamaTarihi.year}}, {{project.ProjeBaslamaTarihi.month}}, {{project.ProjeBaslamaTarihi.day}}), 
+        new Date({{project.ProjeBitisTarihi.year}}, {{project.ProjeBitisTarihi.month}}, {{project.ProjeBitisTarihi.day}}), null, {{project.TamamlanmaYuzdesi}}, null],
+        {% for paket in ispaketi %}
+        ['{{paket.id}}', '{{paket.isPaketiadi}}', '{{paket.sorumlu}}', 
+        new Date({{paket.baslangicTarihi.year}}, {{paket.baslangicTarihi.month}}, {{paket.baslangicTarihi.day}}), 
+        new Date({{paket.bitisTarihi.year}}, {{paket.bitisTarihi.month}}, {{paket.bitisTarihi.day}}), null, {{paket.tamamlanmaOranı}}, null],
+        {% endfor %}
+      ]);
+
+      var options = {
+        gantt: {
+          trackHeight: 30
+        }
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+{% endblock extrahead %}
+
+{% block content %}
+<div class="container-fluid">
+  <div id="ui-view" style="opacity: 1;">
+    <div class="jumbotron p-4 p-md-1 text-white rounded bg-dark">
+      <div class="animated fadeIn">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <div class="col-md-10">
+              <h1 class="display-6 font-italic">{{project.ProjeAdi}}</h1>
+              <p class="lead"><strong>{{project.ProjeKodu}}</strong></p>
+              <p class="lead">Proje: <strong>{{project.get_ProjeDurumu_display}}</strong>   |   Yürütücü: <strong>{{project.ProjeYurutucusu}}</strong>   |   Proje Çıktısı: <strong>{{project.get_PRojeCiktisi_display}}</strong></p>
+            </div>
+          </div>       
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid animated fadeIn">
+  <div id="ui-view" style="opacity: 1;">
+    <div class="animated fadeIn">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card-group">
+            <div class="card">
+              <div class="card-body">
+                        
+                <div id="chart_div"></div>
+                {% if project.ProjeDurumu == 1 %}
+                                <span class="badge badge-success" style="width: 75px;">Tamamlandı</span>
+                            {% elif project.ProjeDurumu == 2 %}
+                                <span class="badge badge-info" style="width: 75px;">Devam Ediyor</span>
+                            {% else %}
+                                <span class="badge badge-danger" style="width: 75px;">İptal</span>
+                            {% endif %}
+                            
+                            <span class="text-muted small">({{ project.TamamlanmaYuzdesi }}%)</span>
+                        </span>
+                        <div class="bars">
+                            <div class="progress progress-xs">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.TamamlanmaYuzdesi }}%" aria-valuenow="{{ project.TamamlanmaYuzdesi }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      <div class="callout callout-blue">
+                      <small class="text-muted">Başlangıç Tarihi</small>
+                      <br>
+                      <strong class="h4">{{project.ProjeBaslamaTarihi}}</strong></div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="callout callout-blue">
+                      <small class="text-muted">Planlanan Bitiş Tarihi</small>
+                      <br>
+                      <strong class="h4">{{project.ProjeBitisTarihi}}</strong></div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="callout callout-blue">
+                      <small class="text-muted">Tahmini Proje Adam/Ay</small>
+                      <br>
+                      <strong class="h4">{{project.ProjeSuresiAdamAy}}</strong></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      <div class="callout callout-danger">
+                      <small class="text-muted">Tahmini Proje Bütçesi(TL)</small>
+                      <br>
+                      <strong class="h4">{{project.ToplamProjeButcesi}}</strong></div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="callout callout-danger">
+                      <small class="text-muted">Tahmini Özkaynak(TL)</small>
+                      <br>
+                      <strong class="h4">{{project.OzKaynakTutar}}</strong></div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="callout callout-danger">
+                      <small class="text-muted">Tahmini Destek Tutarı(TL)</small>
+                      <br>
+                      <strong class="h4">{{project.DestekTutari}}</strong></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Özet</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Detay</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Personeller</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <div class="card card-accent-gray-300">
+                        <div class="card-body">
+                          <h5 class="card-title">Proje Konusu</h5>
+                          <p class="card-text"> {{project.ProjeKonusu}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-gray-300">
+                        <div class="card-body">
+                          <h5 class="card-title">Proje Özeti</h5>
+                          <p class="card-text"> {{project.ProjeOzeti}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-gray-300">
+                        <div class="card-body">
+                          <h5 class="card-title">Ulusal Destek</h5>
+                          <p class="card-text"> Ulusal Destek: <strong>{{ project.UlusalDestek|yesno:"Var,Yok" }}</strong>
+                          <p class="card-text"> Tanım: {{project.UlusalDestekTanim|default_if_none:"-"}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-gray-300">
+                        <div class="card-body">
+                          <h5 class="card-title">Hizmet Alımı</h5>
+                          <p class="card-text"> Hizmet Alımı: {{project.get_HizmetAlimi_display}} </p>
+                          <p class="card-text"> Hizmet Alım Yeri: {{project.HizmetAlimiKonusu|default_if_none:"-"}} </p>
+                          <p class="card-text"> Yurt İçi Tutar(TL): {{project.YurtIciHizmetAlimiTutari|default_if_none:"-"}} </p>
+                          <p class="card-text"> Yurt Dışı Tutar(TL): {{project.YurtDisiHizmetAlimiTutari|default_if_none:"-"}} </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                      <div class="card card-accent-info">
+                        <div class="card-body">
+                          <h5 class="card-title">Proje Konusunu Belirleye İhtiyaçlar</h5>
+                          <p class="card-text">{{project.ProjeKonusunuBelirleyenIhtiyaclar}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-info">
+                        <div class="card-body">
+                          <h5 class="card-title">Proje Kapsamında Yapılacak Faaliyetler</h5>
+                          <p class="card-text"> {{project.ProjeKapsamindaYapilacakFaaliyetler}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-info">
+                        <div class="card-body">
+                          <h5 class="card-title">Projenin Yenilikçi Yönü ve AR-GE Niteliği</h5>
+                          <p class="card-text">  {{project.ProjeninYenilikciYonuArgeNiteligi}} </p>
+                        </div>
+                      </div>
+                      <div class="card card-accent-info">
+                        <div class="card-body">
+                          <h5 class="card-title">Projenin Beklenen Çıktıları</h5>
+                          <p class="card-text"> {{project.ProjeninBeklenenCiktilariFaydalari}} </p>
+                        </div>
+                      </div>
+                       <div class="card card-accent-teal">
+                        <div class="card-body">
+                          <h5 class="card-title">İş Birlikleri</h5>
+                          <p class="card-text"> Üniversite-Sanayi İşbirliği Mi? <strong> {{project.get_UniversiteSanayiIsbirligiProjesi_display}}</strong> </p>
+                          <p class="card-text"> Firmalar Arası İşbirliği Mi? <strong> {{project.get_FirmalarArasiArgeIsbirligi_display}}</strong> </p>
+                          <p class="card-text"> Siparişe Dayalı Ar-Ge Projesi Mi? <strong> {{project.get_SipariseDayaliArgeProjesi_display}}</strong> </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                      <p class="card-subtitle mb-2 text-dark"><strong> Projedeki Toplam Personel Sayısı:</strong> <span class="badge badge-pill badge-dark" > {{query.count}} </span></p>
+                      <table class="table table-responsive-sm table-hover table-outline mb-5 ">
+                        <thead class="thead-light">
+                          <tr>
+                            <th class="text-center"><i class="fa fa-user"></i></th>
+                            <th>Personel Adı</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for personel in query %}
+                          <tr>
+                            <td class="text-center">
+                              <div class="avatar">
+                                {% if personel.user_img %}
+                                  <img src="{% get_media_prefix %}{{ personel.user_img }}" class="img-avatar" alt="{{ personel.email }}">
+                                {% else %}
+                                  <img src="{% static 'core/avatar/blank_profile.png' %}" class="img-avatar">
+                                {% endif %}
+                              </div>
+                            </td>
+                            <td>
+                              <div>{{ personel.name }} {{ personel.surName }} </a></div>
+                              <div class="small text-muted">
+                                <span>Ar-Ge Merkezi Başlangıç:</span> | {{ personel.rdStartDate }}
+                              </div>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        <tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

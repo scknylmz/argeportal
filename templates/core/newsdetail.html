@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item passive">Haberler</a></li>
+{% endblock breadcrumb %}
+
+
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated %}
+      <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:updatenews' news.id %}"><i class="fa fa-edit"></i> Haberi Düzenle </a>
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block content %}
+<div class="container-fluid">
+    <div id="ui-view" style="opacity: 1;">
+        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="col-md-8 px-0">
+                            <h1 class="display-4 font-italic">{{news.title}}</h1>
+                            <p class="lead my-3">{{news.body}}</p>
+                            <div class="mb-1 text-muted">{{news.addedDate}}</div>                           
+                        </div>
+                    </div>       
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div id="ui-view" style="opacity: 1;">
+        <div class="jumbotron p-4 p-md-5 text-black rounded bg-white">
+            <div class="animated fadeIn">
+                <div class="row">
+ 
+                        <div class="col-md-7 px-0">
+                            <p>{{news.content|safe}}</p>                            
+                        </div>
+                        <div class="col-md-4 ml-md-auto">
+                            <img class="rounded" src="{{news.newsImg.url}}" alt="Generic placeholder image" width="400">                            
+                        </div>
+       
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

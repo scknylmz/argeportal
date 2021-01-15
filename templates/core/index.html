@@ -1,0 +1,392 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">Ana Sayfa</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="animated-fadeIn">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-text-white bg-primary h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <h3>{{personels_active.count}}</h3>
+                            </div>
+                            <div class="col-md-9">
+                            <p class="text-left">Aktif Ar-Ge Personeli</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-danger h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <h3>{{projects_active.count}}</h3>
+                            </div>
+                            <div class="col-md-9">
+                            <p class="text-left">Devam Eden Ar-Ge Projesi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-info h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                            <h3>{{projects_finished.count}}</h3>
+                            </div>
+                            <div class="col-md-9">
+                            <p class="text-left">Tamamlanmış Ar-Ge Projesi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-text-white bg-warning h-75">
+                    <div class="card-body pb-0 pr-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h3>{{projects_national.count}}</h3>
+                            </div>
+                            <div class="col-md-9">
+                                <p class="text-left">Ulusal Destekli Proje</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-gray-200 h-75">
+                    <div class="card-body pt-0 pb-0 pr-2">
+                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Arge Harcaması </i>
+                        <p class="h1 text-gray-700"> {{harcama.outcome|floatformat:"2"|intcomma}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-gray-200 h-75">
+                    <div class="card-body pt-0 pb-0 pr-2">
+                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Arge Teşviği </i>
+                        <p class="h1 text-gray-700">{{harcama.totaltesvik|floatformat:"2"|intcomma}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-gray-200 h-75">
+                    <div class="card-body pt-0 pb-0 pr-2">
+                        <i class="fa fa-turkish-lira text-left text-gray-700"> Toplam Nakit Teşvik </i>
+                        <p class="h1 text-gray-700">{{harcama.income|floatformat:"2"|intcomma}}</p>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-12">
+                    <div class="card-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-9" style="height:110%">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-filter text-dark"></i></button>
+                                            <div class="dropdown-menu dropdown-menu-left">
+                                                <a class="dropdown-item btn" onclick="lastyearChart()"><i class="fa fa-chart-line"></i> Mevcut Yıl</a>
+                                                <a class="dropdown-item btn" onclick="last3yearChart()"><i class="fa fa-chart-line"></i> Son 3 Yıl</a>
+                                                <a class="dropdown-item btn" onclick="allyearChart()"><i class="fa fa-chart-line"></i> Hepsi</a>
+                                            </div>
+                                        </div>
+                                        <canvas id="myChart1" height="100"></canvas>
+                                    </div>
+                                    <div class="col-md-3 text-gray-700 callout callout-cyan">
+                                        <p class="h3">Ortalama Teşvik Oranı</p>
+                                        <br>
+                                        <strong class="h1">% {{harcama.avrtesvik|floatformat:"1"}}</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header bg-gray-200">
+                        <p class="h4 text-gray-700">Personel Dağılımları</p>
+                    </div>    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <canvas id="myChart2" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                <canvas id="myChart3" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>      
+                <div class="card">
+                    <div class="card-header bg-gray-200"><p class="h4 text-gray-700">Eğitim Dağılımları</p></div>
+                        <div class="card-body">
+                            <canvas id="myChart4" height="100"></canvas>
+                        </div>
+                    </div>
+                    <div class="card-deck mt-3">
+                        <div class="card">
+                            <div class="card-header bg-dark">
+                                <p class="h5 card-title text-white">Başvuru Yapılan Patent Sayısı</p>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myChart5" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header bg-dark">
+                                <p class="h5 card-title text-white">Yayın/Makale/Bildiri</p>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myChart6" height="100"></canvas>
+                            </div>    
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+var alldata = [{% for i in argetesvik %}"{{i.ayliktesvikyuzde}}",{% endfor %}];
+var alllabel = [{% for i in argetesvik %}"{{i.date}}",{% endfor %}];
+var last3data = [{% for i in argetesvik_last3year %}{{i.ayliktesvikyuzde|safe}},{% endfor %}];
+var last3label = [{% for i in argetesvik_last3year %}"{{i.date}}",{% endfor %}];
+var lastdata = [{% for i in argetesvik_thisyear %}{{i.ayliktesvikyuzde|safe}},{% endfor %}];
+var lastlabel = [{% for i in argetesvik_thisyear %}"{{i.date}}",{% endfor %}];
+
+var ctx = document.getElementById('myChart1').getContext('2d');
+var myChart1 = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: alllabel,
+        datasets: [{
+            label: 'Aylık Teşvik Oranı',
+            data: alldata,
+            backgroundColor: [
+                'rgb(25, 94, 131, 0.7)',
+            ],
+            borderColor: [
+                'rgb(25, 94, 131)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Ar-Ge Teşvik Oranı",
+            fontSize: 24,
+        },
+        legend: {
+            display: false,
+        }
+    }
+});
+        function lastyearChart() {
+            myChart1.data.labels = lastlabel;
+            myChart1.data.datasets[0].data = lastdata;
+            myChart1.update();
+        };
+        function last3yearChart() {
+            myChart1.data.labels = last3label;
+            myChart1.data.datasets[0].data = last3data;
+            myChart1.update();
+        };
+        function allyearChart() {
+            myChart1.data.labels = alllabel;
+            myChart1.data.datasets[0].data = alldata;
+            myChart1.update();
+        };
+var ctx = document.getElementById('myChart2').getContext('2d');
+var myChart2 = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for i in personel_gender %}"{{i.gender_display|safe}}",{% endfor %}],
+        datasets: [{
+            label: 'Çalışan Sayısı',
+            data: [{% for i in personel_gender %}{{i.gender__count|safe}},{% endfor %}],
+            backgroundColor: [
+                'rgba(0, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',     
+            ],
+            borderColor: [
+                'rgba(0, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',  
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI,
+        legend: {
+            position : 'left'
+        },
+    }
+});
+var ctx = document.getElementById('myChart3').getContext('2d');
+var myChart3 = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for i in personel_respons %}"{{i.respons_display|safe}}",{% endfor %}],
+        datasets: [{
+            label: 'Çalışan Sayısı',
+            data: [{% for i in personel_respons %}{{i.respons__count|safe}},{% endfor %}],
+            backgroundColor: [
+                'rgba(25, 32, 131, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(0, 99, 132, 0.5)',   
+            ],
+            borderColor: [
+                'rgba(25, 32, 131, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(0, 99, 132, 1)',   
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI,
+        legend: {
+            position : 'left',
+            labels : {
+                boxWidth : 10,
+            }
+        },
+    }
+});
+var ctx = document.getElementById('myChart4').getContext('2d');
+var myChart4 = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [{% for i in personel_education %}"{{i.education_display|safe}}",{% endfor %}],
+        datasets: [{
+            label: 'Çalışan Sayısı',
+            data: [{% for i in personel_education %}{{i.graduated__count|safe}},{% endfor %}],
+            backgroundColor: [
+                '#55efc4',
+                '#81ecec',
+                '#74b9ff',
+                '#a29bfe',
+                '#ffeaa7',
+                '#fab1a0',
+                '#d63031',
+                '#6c5ce7',
+                '#fdcb6e',
+                '#3ae374',
+                '#17c0eb',     
+            ],
+            borderColor: [
+                '#55efc4',
+                '#81ecec',
+                '#74b9ff',
+                '#a29bfe',
+                '#ffeaa7',
+                '#fab1a0',
+                '#d63031',
+                '#6c5ce7',
+                '#fdcb6e',
+                '#3ae374',
+                '#17c0eb',  
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI,
+        legend: {
+            display : false,
+            position : 'left'
+        },
+    }
+});
+var ctx = document.getElementById('myChart5').getContext('2d');
+var myChart5 = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for i in fikrihak %} "{{i.model_display}}", {% endfor %}],
+        datasets: [{
+            label: 'Çalışan Sayısı',
+            data: [{% for i in fikrihak %} {{i.model__count}}, {% endfor %}],
+            backgroundColor: [
+                'rgba(0, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',    
+            ],
+            borderColor: [
+                'rgba(0, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI,
+        legend: {
+            position : 'left',
+            labels : {
+                boxWidth : 10,
+            }
+        },
+    }
+});
+var ctx = document.getElementById('myChart6').getContext('2d');
+var myChart6 = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for i in bildiri %} "{{i.bildiri_display}}",{% endfor %}],
+        datasets: [{
+            label: 'Çalışan Sayısı',
+            data: [{% for i in bildiri %} {{i.typ__count}}, {% endfor %}],
+            backgroundColor: [
+                'rgba(0, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(52, 168, 115, 0.5)',
+            ],
+            borderColor: [
+                'rgba(0, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(52, 168, 115, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        rotation: 1 * Math.PI,
+        circumference: 1 * Math.PI,
+        legend: {
+            position : 'left',
+            labels : {
+                boxWidth : 10,
+            }
+        },
+    }
+});
+</script>
+{% endblock %}

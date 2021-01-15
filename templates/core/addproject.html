@@ -1,0 +1,374 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:projectsmain' %}" >Projeler</a></li>
+        <li class="breadcrumb-item passive">Proje Kayıt</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data" id="myForm">
+                                {% csrf_token %}
+                                <h1><i class="fa fa-gavel"></i> Proje Kayıt</h1>
+                                <p class="text-center font-2xl">Ar-Ge Projesi Kayıt Formu</p>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Durumu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-question"></i></span>
+                                        </div>
+                                        {{ form.ProjeDurumu}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Kodu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-barcode"></i></span>
+                                        </div>
+                                        {{ form.ProjeKodu}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Adı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-audio-description"></i></span>
+                                        </div>
+                                        {{ form.ProjeAdi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Yürütücüsü</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-blind"></i></span>
+                                        </div>
+                                        {{ form.ProjeYurutucusu}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Proje Başlangıç Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                        </div>
+                                        {{ form.ProjeBaslamaTarihi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Proje Bitiş Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                        </div>
+                                        {{ form.ProjeBitisTarihi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Tamamlanma Yüzdesi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-percent"></i></span>
+                                        </div>
+                                        {{ form.TamamlanmaYuzdesi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Proje Adam/Ay</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-user-secret"></i></span>
+                                        </div>
+                                        {{ form.ProjeSuresiAdamAy}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Konusu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeKonusu}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Özeti</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeOzeti}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Herhangi Bir Ulusal Destek Programına Tabi Mi?</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hands-helping"></i></span>
+                                        </div>
+                                        {{ form.UlusalDestek}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Ulusal Destek Programı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.UlusalDestekTanım}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Öz Kaynaklarca Karşılanan tutar (TL)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hand-holding-usd"></i></span>
+                                        </div>
+                                        {{ form.OzKaynakTutar}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Destek Tutarı (TL)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hand-holding-usd"></i></span>
+                                        </div>
+                                        {{ form.DestekTutari}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Toplam Proje Bütçesi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hand-holding-usd"></i></span>
+                                        </div>
+                                        {{ form.ToplamProjeButcesi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Hizmet Alımı Yapılan Yer</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-dolly"></i></span>
+                                        </div>
+                                        {{ form.HizmetAlimi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Hizmet Alımı Konusu</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.HizmetAlimiKonusu}}
+                                    </div>
+                                </div>
+                                
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Yurt İçi Hizmet Alımı Tutarı (TL)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hand-holding-usd"></i></span>
+                                        </div>
+                                        {{ form.YurtIciHizmetAlimiTutari}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Yurt Dışı Hizmet Alımı Tutarı (TL)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-hand-holding-usd"></i></span>
+                                        </div>
+                                        {{ form.YurtDisiHizmetAlimiTutari}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Konusunu Belirleyen İhtiyaçlar</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeKonusunuBelirleyenIhtiyaclar}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Proje Kapsamında Yapılacak Faaliyetler</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeKapsamindaYapilacakFaaliyetler}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Yenilikçi Yönü ve AR-GE Niteliği</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeninYenilikciYonuArgeNiteligi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Beklenen Çıktıları</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-quote-left"></i></span>
+                                        </div>
+                                        {{ form.ProjeninBeklenenCiktilariFaydalari}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projedeki Personel Sayısı</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-users"></i></span>
+                                        </div>
+                                        {{ form.ProjePersonel}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite Sanayi İş Birliği Mi?</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.UniversiteSanayiIsbirligiProjesi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Üniversite Ar-Ge İş Birliği Mi?</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-university"></i></span>
+                                        </div>
+                                        {{ form.FirmalarArasiArgeIsbirligi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Siparişe Dayalı Ar-Ge Projesi Mi?</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-bullhorn"></i></span>
+                                        </div>
+                                        {{ form.SipariseDayaliArgeProjesi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Proje Kartının Güncellenme Tarihi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-alt"></i></span>
+                                        </div>
+                                        {{ form.ProjeGuncellemeTarihi}}
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Projenin Çıktısı Nedir?</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-sign-out-alt"></i></span>
+                                        </div>
+                                        {{ form.PRojeCiktisi}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <h4><i class="fa fa-user-plus"></i>  Projede Görev Alan Personelleri Seçiniz...</h4>
+                                <p class="text-muted bade badge-warning">En Az 1 Personel Seçmelisiniz !</p>
+                                <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                    <table class = 'table table-hover'>
+                                        {% for subfield in form.projecalis %}
+                                        {% if forloop.counter <= liste|add:"0" %}
+                                            <tr>
+                                            <td>{{ subfield.label }}</td>
+                                            <td>{{ subfield }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <table class = 'table table-hover'>
+                                        {% for subfield in form.projecalis %}
+                                        {% if forloop.counter > liste|add:"0" and forloop.counter <= liste2|add:"0" %}
+                                            <tr>
+                                            <td>{{ subfield.label }}</td>
+                                            <td>{{subfield}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <table class = 'table table-hover'>
+                                        {% for subfield in form.projecalis %}
+                                        {% if forloop.counter > liste2|add:"0" and forloop.counter <= liste3|add:"0" %}
+                                            <tr>
+                                            <td>{{ subfield.label }}</td>
+                                            <td>{{subfield}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                    </div>
+                                <div class="col-md-3">
+                                    <table class = 'table table-hover'>
+                                        {% for subfield in form.projecalis %}
+                                        {% if forloop.counter > liste3|add:"0" %}
+                                            <tr>
+                                            <td>{{ subfield.label }}</td>
+                                            <td>{{subfield}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Kaydet</button>                                        
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+ <!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Projeyi <strong>Kaydetmek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+                                
+   
+
+{% endblock content %}

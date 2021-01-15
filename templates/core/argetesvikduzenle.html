@@ -1,0 +1,129 @@
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:argetesvik' %}" >Ar-Ge Tesvik</a></li>
+        <li class="breadcrumb-item passive">Tesvik Düzenle</li>
+{% endblock breadcrumb %}
+{% block content %}
+<div class="container animated fadeIn">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card-group">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <form method="post" action="" enctype="multipart/form-data" id="myForm">
+                                {% csrf_token %}
+                                <h1><i class="fa fa-hand-holding-usd"></i> Teşvik Düzenle</h1>
+                                <p class="text-center font-2xl">Ar-Ge Teşvik Verileri Düzenleme Formu</p>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Teşvik Dönemi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-minus"></i></span>
+                                        </div>
+                                        {{ form.date}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Toplam Arge Harcaması</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-turkish-lira"></i></span>
+                                        </div>
+                                        {{ form.argetotal}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Nakit Alınan Hibe</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-turkish-lira"></i></span>
+                                        </div>
+                                        {{ form.hibe}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">5746 SGK Teşvik</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-turkish-lira"></i></span>
+                                        </div>
+                                        {{ form.sgktesvik5746}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">5746 Gelir Teşvik</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-turkish-lira"></i></span>
+                                        </div>
+                                        {{ form.gelirtesvik5746}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold">Kurumlar-Geçici Ar-Ge İndirimi</label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-turkish-lira"></i></span>
+                                        </div>
+                                        {{ form.argeindirim}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Güncelle</button>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">Sil</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+<div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Döneme Ait Teşvik Verilerini <strong>Güncellemek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <button type="submit" class="btn btn-primary" form="myForm">EVET</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Uyarı</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p> Döneme Ait Teşvik Verilerini <strong>Silmek İstiyor Musunuz?</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Tekrar Düşünmek İstiyorum</button>
+        <a class="btn btn-danger" href="{% url 'core:argetesviksil' id %}">Sil</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+          
+
+{% endblock content %}

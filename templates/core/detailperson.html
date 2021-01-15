@@ -1,0 +1,125 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item"><a  href="{% url 'core:index' %}" >Ana Sayfa</a></li>
+        <li class="breadcrumb-item"><a  href="{% url 'core:personelmain' %}" >Personeller</a></li>
+        <li class="breadcrumb-item">Personel Detayı</li>
+{% endblock breadcrumb%}
+ 
+{% block breadcrumb_menu %}
+    {% if user.is_authenticated  %}
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars"></i>
+            Personel Güncellemeleri
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item", href="{% url 'core:personelupdate' person.id %}"><i class="fa fa-retweet"></i> Personel Güncelle </a>
+                <a class="dropdown-item", href="{% url 'core:addmanmonthid' person.id %}"><i class="fa fa-diagnoses"></i> Adam/Ay Güncelle </a>
+                <a class="dropdown-item", href="#"><i class="fa fa-clipboard-list"></i> Blasasda </a>
+            </div>
+        </div>
+        <a class="btn btn-gray-100 btn-outline-blue", href="{% url 'core:addpersonel' %}"><i class="fa fa-user-plus"></i> Personel Ekle </a>
+        <a class="btn" href="{% url 'core:exportPerson' person.id %}"><i class="fa fa-download"></i> Personel Export </a>
+    </div>
+    
+    
+    
+    {% endif %}
+{% endblock breadcrumb_menu %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div id="ui-view" style="opacity: 1;">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="social-box" style="height:110%">
+                        {% if person.userImg %}
+                        <img src="{{ person.userImg.url }}" class="img-avatar m-4" alt="{{ user_view }}" width="20%">
+                        {% else %}
+                        <img src="{% static 'core/avatar/blank_profile.png' %}" class="img-avatar m-4" width="20%">
+                        {% endif %}
+                        <ul>
+                        <li>
+                            <strong> {{manmonthsum.adamAylar__sum|floatformat:2}} </strong>
+                            <span>TOPLAM ADAM/AY</span>
+                        </li>
+                        <li>
+                            <strong>{% for count in manmonth %} {{count.total}} {% endfor %}</strong>
+                            <span>PROJE</span>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mt-5">
+                        <div class="simple-box">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <ul class="mt-4 mx-5">
+                                        <h5>Kişisel Bilgiler</h5>
+                                        <li><span>İsim:</span> {{ person.name }} {{ person.surName }}</li>
+                                        <li><span>Doğum Tarihi:</span> {{ person.birthDay }}</li>
+                                        <li><span>E-mail:</span> {{ person.email}}</li>
+                                        <li><span>Uyruk:</span> {{ person.get_country_display }}</li>
+                                        <li><span>T.C. No:</span> {{ person.idName }}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-6 text-left">
+                                    <ul class="mt-4 mx-5">
+                                        <h5>Çalışan Bilgileri</h5>
+                                        <li><span>Departman:</span> {{person.department}}</li>
+                                        <li><span>Görevi:</span> {{ person.get_respons_display }}</li>
+                                        <li><span>Sicil No:</span> {{ person.sNumber }}</li>
+                                        <li><span>İşe Başlangıç Tarihi:</span> {{ person.startDate}}</li>
+                                        <li><span>Ar-Ge Başlangıç Tarihi:</span> {{ person.rdStartDate }}</li>
+                                        <li><span>İşten Ayrılış Tarihi:</span> {{ person.finisDate|default_if_none:"-" }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mt-5">
+                        <div class="simple-box">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <ul class="mt-4 mx-5">
+                                    <h5>Eğitim Bilgileri</h5>
+                                    <li><span>Mezuniyet Derecesi:</span> {{ person.get_graduated_display }}</li>
+                                    <li><span>Lise Adı:</span> {{ person.hschool|default_if_none:"-" }}</li>
+                                    <li><span>Bölüm (lise):</span> {{ person.hschooldist|default_if_none:"-"}}</li>
+                                    <li><span>Ön Lisans Üniversite Adı:</span> {{ person.huschool|default_if_none:"-" }}</li>
+                                    <li><span>Bölüm (Ön Lisans):</span> {{ person.huschooldist|default_if_none:"-"}}</li>
+                                    <li><span>Lisans Üniversite Adı:</span> {{ person.university|default_if_none:"-" }}</li>
+                                    <li><span>Bölüm (Lisans):</span> {{ person.universitydist|default_if_none:"-"}}</li>
+                                    <li><span>Yüksek Lisans Üniversite Adı:</span> {{ person.masteruniversity|default_if_none:"-" }}</li>
+                                    <li><span>Bölüm (Yüksek Lisans):</span> {{ person.masteruniversitydist|default_if_none:"-"}}</li>
+                                    <li><span>Doktora Üniversite Adı:</span> {{ person.druniversity|default_if_none:"-" }}</li>
+                                    <li><span>Bölüm (Doktara):</span> {{ person.druniversitydist|default_if_none:"-"}}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <ul class="mt-4 mx-5">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
